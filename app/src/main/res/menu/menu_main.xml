@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.dingding.picbasic.MainActivity">
+    <item
+        android:id="@+id/select_folder"
+        android:orderInCategory="100"
+        android:title="選擇資料夾"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/random"
+        android:orderInCategory="100"
+        android:title="隨機"
+        app:showAsAction="always" />
+</menu>
