@@ -42,7 +42,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
 //        Glide.with(this).load(fs[0].getUri()).fitCenter().into(iv_f);
-
         viewHolder.tv.setText(""  + itemsDatas.get(position).getName());
         viewHolder.iv.setImageURI(itemsDatas.get(position).getUri());
     }

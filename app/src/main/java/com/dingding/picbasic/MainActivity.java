@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     int READ_REQUEST_CODE = 1;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<MyImage> images = new ArrayList<>();
     ImageAdapter adapter;
     GlobalApp dapp;
+    int num_pic = 20;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,10 +72,35 @@ public class MainActivity extends AppCompatActivity {
 
 
         for(int i=0;i<fs.length;i++){
+            if(i>=num_pic) break;
             images.add(new MyImage(fs[i].getUri(), fs[i].getName()));
         }
 
         adapter.notifyDataSetChanged();
+    }
+    private void pickRandom20() {
+        images.clear();
+
+        String str_uri = dapp.pref.getString("folderUri","");
+        Uri treeUri = Uri.parse(str_uri);
+
+        DocumentFile pickedDir = DocumentFile.fromTreeUri(this, treeUri);
+        DocumentFile[] fs = pickedDir.listFiles();
+
+        Random rand = new Random();
+        int random_idx = rand.nextInt(fs.length); // Obtain a number between [0 - 49].
+
+
+        Toast.makeText(this, "編號：" + random_idx, Toast.LENGTH_SHORT).show();
+
+
+        for(int i=random_idx;i<fs.length;i++){
+            images.add(new MyImage(fs[i].getUri(), fs[i].getName()));
+            if(i - random_idx >= num_pic) break;
+        }
+
+        adapter.notifyDataSetChanged();
+        rv.scrollToPosition(0);
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -98,8 +125,10 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(intent, READ_REQUEST_CODE);
             return true;
         }else if (item.getItemId() == R.id.random) {
+            pickRandom20();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
 }
