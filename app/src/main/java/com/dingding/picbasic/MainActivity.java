@@ -11,6 +11,9 @@ import com.obsez.android.lib.filechooser.ChooserDialog;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.PrettyFormatStrategy;
+import com.yarolegovich.lovelydialog.LovelyInfoDialog;
+import com.yarolegovich.lovelydialog.LovelyStandardDialog;
+import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<MyImage> images = new ArrayList<>();
     ImageAdapter adapter;
     GlobalApp dapp;
-    int num_pic = 20;
+    int num_pic = 5;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         dapp = (GlobalApp) getApplicationContext();
         rv = findViewById(R.id.rv);
 
-
+        num_pic = Integer.parseInt(dapp.pref.getString("num_pic", "20"));
         adapter = new ImageAdapter(images);
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
@@ -95,8 +98,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         for(int i=random_idx;i<fs.length;i++){
-            images.add(new MyImage(fs[i].getUri(), fs[i].getName()));
             if(i - random_idx >= num_pic) break;
+            images.add(new MyImage(fs[i].getUri(), fs[i].getName()));
         }
 
         adapter.notifyDataSetChanged();
@@ -126,6 +129,27 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }else if (item.getItemId() == R.id.random) {
             pickRandom20();
+            return true;
+        }else if (item.getItemId() == R.id.setting) {
+            new LovelyTextInputDialog(this)
+                    .setTitle("輸入顯示圖片數量")
+                    .setInitialInput(dapp.pref.getString("num_pic", ""))
+                    .setInputFilter("請輸入數字", new LovelyTextInputDialog.TextFilter() {
+                        @Override
+                        public boolean check(String text) {
+                            return text.matches("^[0-9]*$");
+                        }
+                    })
+                    .setConfirmButton(android.R.string.ok, new LovelyTextInputDialog.OnTextInputConfirmListener() {
+                        @Override
+                        public void onTextInputConfirmed(String text) {
+                            Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
+                            dapp.pref.edit().putString("num_pic", text).commit();
+                            num_pic = Integer.parseInt(dapp.pref.getString("num_pic", ""));
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .show();
             return true;
         }
         return super.onOptionsItemSelected(item);
