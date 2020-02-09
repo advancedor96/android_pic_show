@@ -4,15 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.bumptech.glide.Glide;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.obsez.android.lib.filechooser.ChooserDialog;
-import com.orhanobut.logger.AndroidLogAdapter;
-import com.orhanobut.logger.Logger;
-import com.orhanobut.logger.PrettyFormatStrategy;
-import com.yarolegovich.lovelydialog.LovelyInfoDialog;
-import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
 import androidx.annotation.Nullable;
@@ -22,14 +13,11 @@ import androidx.documentfile.provider.DocumentFile;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -125,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.select_folder) {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
             startActivityForResult(intent, READ_REQUEST_CODE);
             return true;
         }else if (item.getItemId() == R.id.random) {
