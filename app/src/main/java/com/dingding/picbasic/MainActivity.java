@@ -81,7 +81,14 @@ public class MainActivity extends AppCompatActivity {
                 now_idx = i;
                 break;
             }
-            images.add(new MyImage(Uri.fromFile(allfiles[i]), i + "-" + allfiles[i].getName()));
+            if(allfiles[i].isDirectory()) continue;
+
+            String ext = allfiles[i].getName().substring(allfiles[i].getName().lastIndexOf("."));
+            if(ext.toLowerCase().equals(".png") || ext.toLowerCase().equals(".jpg")){
+                images.add(new MyImage(Uri.fromFile(allfiles[i]), i + "-" + allfiles[i].getName()));
+            }else{
+                Logger.d("跳過的副檔名:"+ext.toLowerCase());
+            }
         }
         adapter.notifyDataSetChanged();
         rv.scrollToPosition(0);
@@ -107,16 +114,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+        showNext(now_idx);
 
-        for(int i=now_idx;i<allfiles.length;i++){
-            if(i - now_idx>=num_pic) {
-                now_idx = i;
-                break;
-            }
-            images.add(new MyImage(Uri.fromFile(allfiles[i]), i + "-" + allfiles[i].getName()));
-        }
-        adapter.notifyDataSetChanged();
-        rv.scrollToPosition(0);
     }
 
     public void pickFolder(){
