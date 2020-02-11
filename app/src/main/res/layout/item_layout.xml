@@ -25,11 +25,12 @@
         android:layout_height="wrap_content"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
-        android:shadowColor="#009688"
-        android:shadowDx="1"
-        android:shadowDy="1"
-        android:shadowRadius="1"
+        android:shadowColor="@color/white"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5"
         android:text="TextView"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
