@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
         images.clear();
         Toast.makeText(MainActivity.this, "打開" + idx, Toast.LENGTH_LONG).show();
         for(int i=idx;i<allfiles.length;i++){
-            Logger.d("yo"+i);
             if(i - idx >=num_pic) {
                 now_idx = i;
                 break;
