@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                 now_idx = i;
                 break;
             }
-            images.add(new MyImage(Uri.fromFile(allfiles[i]), allfiles[i].getName()));
+            images.add(new MyImage(Uri.fromFile(allfiles[i]), i + "-" + allfiles[i].getName()));
         }
         adapter.notifyDataSetChanged();
         rv.scrollToPosition(0);
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                 now_idx = i;
                 break;
             }
-            images.add(new MyImage(Uri.fromFile(allfiles[i]), allfiles[i].getName()));
+            images.add(new MyImage(Uri.fromFile(allfiles[i]), i + "-" + allfiles[i].getName()));
         }
         adapter.notifyDataSetChanged();
         rv.scrollToPosition(0);
