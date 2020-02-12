@@ -16,6 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.InputType;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -184,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
             new LovelyTextInputDialog(this)
                     .setTitle("輸入顯示圖片數量")
                     .setInitialInput(dapp.pref.getString("num_pic", ""))
+                    .setInputType(InputType.TYPE_CLASS_NUMBER)
                     .setInputFilter("請輸入數字", new LovelyTextInputDialog.TextFilter() {
                         @Override
                         public boolean check(String text) {
