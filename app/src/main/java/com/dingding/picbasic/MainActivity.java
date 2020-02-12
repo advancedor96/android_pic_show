@@ -16,10 +16,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.io.File;
@@ -37,10 +39,40 @@ public class MainActivity extends AppCompatActivity {
     int num_pic = 5;
     int now_idx = 0;
     File[] allfiles;
+    ImageButton ib_goNext, ib_goBack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ib_goNext = findViewById(R.id.ib_goNext);
+        ib_goBack = findViewById(R.id.ib_goBack);
+        GestureDetector gdDown = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener(){
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                showNext(now_idx, true);
+                return true;
+            }
+        });
+        GestureDetector gdUp = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener(){
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                now_idx = now_idx - num_pic*2;
+                showNext(now_idx, false);
+                return true;
+            }
+        });
+
+
+        ib_goNext.setOnTouchListener((v, event) -> {
+            return gdDown.onTouchEvent(event);
+        });
+        ib_goBack.setOnTouchListener((v, event) -> {
+            return gdUp.onTouchEvent(event);
+        });
+
+
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -53,13 +85,8 @@ public class MainActivity extends AppCompatActivity {
         rv.setLayoutManager(new LinearLayoutManager(this));
 
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showNext(now_idx);
-            }
-        });
+//        FloatingActionButton fab = findViewById(R.id.fab);
+//        fab.setOnClickListener(v -> showNext(now_idx));
 
 
         String path = dapp.pref.getString("path","");
@@ -73,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-    public void showNext(int idx){
+    public void showNext(int idx, boolean goTop){
         images.clear();
         Toast.makeText(MainActivity.this, "打開" + idx, Toast.LENGTH_LONG).show();
         for(int i=idx;i<allfiles.length;i++){
@@ -91,7 +118,11 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         adapter.notifyDataSetChanged();
-        rv.scrollToPosition(0);
+        if(goTop){
+            rv.scrollToPosition(0);
+        }else{
+            rv.scrollToPosition(adapter.getItemCount()-1);
+        }
     }
     public void showData(String path){
         images.clear();
@@ -114,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
-        showNext(now_idx);
+        showNext(now_idx, true);
 
     }
 
@@ -147,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }else if (item.getItemId() == R.id.random) {
             int random_idx = new Random().nextInt(allfiles.length);
-            showNext(random_idx);
+            showNext(random_idx, true);
             return true;
         }else if (item.getItemId() == R.id.setting) {
             new LovelyTextInputDialog(this)
@@ -165,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
                             dapp.pref.edit().putString("num_pic", text).commit();
                             num_pic = Integer.parseInt(dapp.pref.getString("num_pic", ""));
-                            showNext(now_idx);
+                            showNext(now_idx, true);
                         }
                     })
                     .setNegativeButton(android.R.string.no, null)
@@ -175,4 +206,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void yo(View view) {
+        Logger.d("yo");
+    }
 }
